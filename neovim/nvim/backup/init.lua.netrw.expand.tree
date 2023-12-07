@@ -1,0 +1,215 @@
+vim.api.nvim_set_option('clipboard', 'unnamedplus')
+vim.g.netrw_liststyle = 3
+vim.g.netrw_list_exp = 1
+
+-- Function to explore and expand all folders
+_G.explore_and_expand = function(folder)
+  vim.cmd('Explore ' .. folder) -- Explore the folder
+  vim.cmd('silent! NetrwTreeOpen') -- Open NetrwTree to expand folders
+
+  local entries = vim.fn.readdir(folder) -- List entries in the current folder
+  if entries then
+    for _, entry in ipairs(entries) do
+      local entry_path = folder .. '/' .. entry
+      if vim.fn.isdirectory(entry_path) == 1 then
+        vim.cmd('Explore ' .. entry_path) -- Explore subfolders
+        vim.cmd('silent! NetrwTreeOpen') -- Open NetrwTree to expand subfolders
+        explore_and_expand(entry_path) -- Recursively explore subfolders
+      end
+    end
+  end
+end
+
+-- Set up an autocmd for the VimEnter event to trigger the function
+vim.cmd([[
+  augroup AutoExpandNetrw
+    autocmd!
+    autocmd VimEnter * lua explore_and_expand(vim.fn.expand('%:p:h'))
+  augroup END
+]])
+
+
+
+--worked-- Function to explore and expand all folders
+--_G.explore_and_expand = function(folder)
+--  vim.cmd('Explore ' .. folder) -- Explore the folder
+--  vim.cmd('silent! NetrwTreeOpen') -- Open NetrwTree to expand folders
+--
+--  local entries = vim.fn.readdir(folder) -- List entries in the current folder
+--  if entries then
+--    for _, entry in ipairs(entries) do
+--      if vim.fn.isdirectory(folder .. '/' .. entry) == 1 then
+--        vim.cmd('Explore ' .. folder .. '/' .. entry) -- Explore subfolders
+--        vim.cmd('silent! NetrwTreeOpen') -- Open NetrwTree to expand subfolders
+--      end
+--    end
+--  end
+--end
+--
+---- Set up an autocmd for the VimEnter event to trigger the function
+--vim.cmd([[
+--  augroup AutoExpandNetrw
+--    autocmd!
+--    autocmd VimEnter * lua explore_and_expand(vim.fn.expand('%:p:h'))
+--  augroup END
+--]])
+--
+
+
+
+
+--local current_dir = vim.fn.expand('%:p:h') -- Get the current directory
+--
+--while true do
+--    local next_dir = vim.fn.globpath(current_dir, '*', 1, 1)
+--    if next_dir[1] == '' then
+--        break
+--    end
+--    vim.cmd('Explore ' .. next_dir[1])
+--    current_dir = next_dir[1]
+--end
+
+
+
+--local current_dir = vim.fn.expand('%:p:h') -- Get the current directory
+--
+--while true do
+--    local next_dir = vim.fn.glob(current_dir .. '/*/', 1, 1)
+--    if next_dir == '' then
+--        break
+--    end
+--    vim.cmd('Explore ' .. next_dir)
+--    current_dir = next_dir
+--end
+
+
+
+-- Automatically expand all folders in netrw upon entering
+--vim.cmd([[
+--  command! AutoExpandNetrw while search('^\s\+', 'W') | execute 'normal! \<CR>' | endwhile
+--  autocmd VimEnter * AutoExpandNetrw
+--]])
+
+
+--vim.cmd([[
+--  autocmd VimEnter * nested let cur_dir = fnameescape(getcwd()) | execute 'silent! Explore ' . cur_dir | let i = 1 | while i <= 100 | execute 'normal! \<CR>' | let i = i + 1 | endwhile
+--]])
+
+--vim.g.netrw_liststyle = 3
+--vim.g.netrw_list_exp = 1
+--
+--vim.cmd([[
+--  autocmd VimEnter * :silent! execute "normal! \<CR>" | execute "normal! zR"
+--]])
+
+
+--vim.cmd([[
+--  function! RecursiveExplore()
+--    let current_folder = expand('%:p:h')
+--    let files = globpath(current_folder, '*', 1, 1)
+--    for file in files
+--      if isdirectory(file) && !file =~# '\v/(^|\/)\.\.?$'
+--        execute 'Explore ' . fnameescape(file)
+--        call RecursiveExplore()
+--        execute 'cd ' . fnameescape(current_folder)
+--      endif
+--    endfor
+--  endfunction
+--
+--  command! -nargs=0 ExploreAll call RecursiveExplore()
+--]])
+--
+--vim.cmd([[autocmd VimEnter * :ExploreAll]])
+
+-- Set up an autocmd for the BufEnter event on buffers matching the pattern 'explored.*'
+--vim.api.nvim_exec([[
+--  augroup ExploreAutocmd
+--    autocmd!
+--    autocmd BufEnter explored.* call v:lua.ExploreCallback()
+--  augroup END
+--]], true)
+--
+---- Callback function for the autocmd
+--_G.ExploreCallback = function()
+--  -- Expand all folders in the current directory
+--  vim.fn.netw.expand_all(vim.fn.bufnr())
+--end
+
+--require('vim.api')
+--
+--vim.api.nvim_autocmd('BufEnter', {
+--  pattern = 'explored.*',
+--  callback = function()
+--    -- Expand all folders in the current directory
+--    vim.fn.netw.expand_all(bufnr)
+--  end
+--})
+--set global:netrw_liststyle = 3
+--vim.api.nvim_autocmd('BufEnter', {
+--  pattern = 'explored.*',
+--  callback = function()
+--    -- Expand all folders in the current directory
+--    vim.fn.netw.expand_all(bufnr)
+--  end
+--})
+--let g:netrw_liststyle = 3
+--let g:netrw_wexpand = 1
+
+--Automatically expand all folders in netwr
+--vim.cmd([[
+--    augroup AutoExpandNetwr
+--        autocmd!
+--        autocmd VimEnter * silent! NetrwTreeOpen
+--    augroup END
+--]])
+print("AutoExpandNetwr group created")
+
+--let s:hasfolder=1
+--let g:foldertoopen = '.'
+--
+--function s:parse_arguments()
+--  let i = 1
+--  while i < len(v:argv)
+--    if v:argv[i][0] == '-'
+--      let i = i + 2
+--    else
+--      let path = v:argv[i]
+--      if path[len(path)-1] == #\' || path[len(path)-1] == '/' 
+--        let path = path[:-2]
+--      endif
+--      if finddir(escape(fnamemodify(path, ':t'), ' '), escape(fnamemodify(path, ':h'), ' ')) != ''
+--        let s:hasfolder = 1
+--        let g:foldertoopen = v:argv[i]
+--        break
+--      else
+--        let s:hasfolder = 0
+--      endif
+--      let i = i + 1
+--    endif
+--  endwhile
+--endfunction
+--
+--call s:parse_arguments()
+--
+--let g:netrw_liststyle = 3
+--let g:netrw_banner = 0
+--let g:netrw_browse_split = 4
+--let g:netrw_winsize = 25
+--let g:netrw_altv = 1
+--
+--function! InitBrowser()
+--  if g:foldertoopen != ''
+--    enew
+--    exe 'Vexplore ' . g:foldertoopen
+--    let g:foldertoopen = ''
+--  endif
+--endfunction
+--
+--if s:hasfolder
+--  augroup ProjectDrawer
+--    autocmd!
+--     autocmd VimEnter * :call InitBrowser()
+--  augroup END
+--endif
+
+require("core.lazy")
