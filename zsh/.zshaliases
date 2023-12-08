@@ -1,0 +1,128 @@
+#database
+#alias sft='search_for_term() { grep -lr "$1" ./ -s | xargs cat; }; search_for_term'
+alias sft='mygrep() { grep -lr "$1" ./ -s | xargs cat; }; mygrep'
+
+#apache 
+alias cdwww="cd /opt/homebrew/var/www "
+alias cd
+
+#cat
+alias cel="cat /opt/homebrew/var/log/httpd/error_log "
+alias ccp='find . -type f -name "*.lua" -exec cat {} + | pbcopy'
+
+#cd-programming:
+alias cdc="cd ~/Desktop/workbench/learn/c "
+alias cdp="cd ~/Desktop/workbench/learn/python "
+alias cdm="cd ~/Desktop/workbench/000.learn/mit "
+alias cdcgi="cd /opt/homebrew/var/www/cgi-bin "
+alias cda="cd /opt/homebrew/etc/httpd "
+alias cdconfig="cd ~/.config/ "
+
+#cd-work:
+alias cdw="cd ~/Documents/workbench/ "
+
+#clear
+alias c='clear '
+
+#evince
+alias ev='evince '
+
+#flask :
+alias fs='f(){flask --app $1 run; unset -f f; }; f'
+
+#exit :
+alias e='exit '
+
+#grep :
+alias g="grep -irls "
+
+#ls
+alias l='ls --color=yes -lh '
+alias ls='ls --color=yes -h '
+alias la='ls --color=yes -al '
+
+#mlplayer : 
+alias mp='function mp(){
+    mplayer "$1";
+}; mp' 
+
+#source :
+alias sz='source ~/.zshrc '
+
+#skhd :
+alias sskhd='skhd --start-sercice'
+alias sskhd='skhd --start-service'
+alias qskhd='skhd --stop-service'
+alias rskhd='skhd --restart-service'
+
+
+
+#touch :
+alias t='touch '
+
+alias md='mkdir '
+alias ma="make all "
+alias rd="rmdir "
+
+#make :
+alias mcs="make cat.src"
+
+#open :
+alias o="open "
+
+#rename
+alias rl="rename -vf 'y/A-Z/a-z/ ' ./* "
+alias r.="rename -vf 's/\ /\./g '  ./* "
+alias r-="rename -vf 's/\-/\./g '  ./* "
+alias r_="rename -vf 's/\_/\./g '  ./* "
+alias r...="rename -vf 's/\.\.\./\./g' ./* "
+alias r..="rename -vf 's/\.\./\./g' ./* "
+alias r,="rename -vf 's/\,/\./g' ./* "
+alias roe="rename -vf 's/\(/\./g' ./* "
+alias rce="rename -vf 's/\)/\./g' ./* "
+alias rcb="rename -vf 's/\[/\./g' ./* "
+alias rob="rename -vf 's/\]/\./g' ./* "
+alias rc="rename -vf 's/\:/\./g' ./* "
+
+alias ra='funciton f() {
+    rl;
+    r,;
+    r-;
+    r_; 
+    roe; 
+    rce; 
+    rcb;
+    rob;
+    r.; 
+    r...; 
+    r..; 
+    rc;
+}; f'
+
+#vim
+alias v='nvim '
+alias vz='nvim ~/.zshaliases '
+alias vm="nvim makefile "
+alias vvr="nvim ~/.vimrc " 
+alias vac="nvim /opt/homebrew/etc/httpd/httpd.conf "
+alias vc="nvim ~/.vim/templates/skeloton.c "
+
+if type brew &>/dev/null; then
+	FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+	autoload -Uz compinit
+	compinit
+fi
+
+#yt-dlp
+
+alias ytdv='yt-dlp --trim-filenames 20 -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"'
+alias ytd="yt-dlp -x -f bestaudio" 
+alias ytdmp3="yt-dlp --ffmpeg-location '/opt/homebrew/bin/ffmpeg' --ffmpeg-location '/opt/homebrew/bin/ffprobe' -f 'ba' -x --audio-format mp3"
+alias ytdv0='yt-dlp --trim-filenames 20 -S res,ext:mp4:m4a --recode mp4 '
+
+# Setting for the new UTF-8 terminal support in Lion
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
+alias vim=nvim
